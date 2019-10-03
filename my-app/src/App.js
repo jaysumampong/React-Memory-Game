@@ -2,12 +2,12 @@ import React, { Component } from "react";
 import ImageCard from "./components/ImageCards";
 import Wrapper from "./components/Wrapper";
 import NavBar from "./components/NavBar";
-import cards from "./cards.json";
+import Footer from "./components/Footer";
 
 class App extends Component {
   // Setting this.state.friends to the friends json array
   state = {
-    cards
+    
   };
 
 
@@ -16,13 +16,8 @@ class App extends Component {
     return (
       <Wrapper>
         <NavBar>test</NavBar>
-        {this.state.cards.map(cards => (
-          <ImageCard
-            id={cards.id}
-            key={cards.id}
-            image={cards.image}
-          />
-        ))}
+  
+    <Footer></Footer>
       </Wrapper>
     );
   }
