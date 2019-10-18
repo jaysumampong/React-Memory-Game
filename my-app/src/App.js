@@ -17,13 +17,13 @@ class App extends Component {
     this.setState({
       imageFileNames: this.shuffle(this.state.imageFileNames)
     }, () => {
-      console.log("Shuffled the images on game start");
+      console.log("One start, Shuffle images");
     });
   }
   handleClick = event => {
     const clickedFile = event.target.alt;
-    const wasImageClickedBefore = this.imageClickedBefore(clickedFile);
-    if (wasImageClickedBefore) {
+    const fileClickedBefore = this.imageClickedBefore(clickedFile);
+    if (fileClickedBefore) {
       this.setState({
         imageFileNames: this.shuffle(this.state.imageFileNames),
         clickedImages: [],
@@ -70,13 +70,13 @@ class App extends Component {
   };
 
   shuffle = (array) => {
-    var currentIndex = array.length, temporaryValue, randomIndex;
+    var currentIndex = array.length, tempVal, randomIndex;
     while (0 !== currentIndex) {
       randomIndex = Math.floor(Math.random() * currentIndex);
       currentIndex -= 1;
-      temporaryValue = array[currentIndex];
+      tempVal = array[currentIndex];
       array[currentIndex] = array[randomIndex];
-      array[randomIndex] = temporaryValue;
+      array[randomIndex] = tempVal;
     }
     return array;
   };
