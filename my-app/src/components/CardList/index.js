@@ -1,15 +1,10 @@
 import React from "react";
-import ImageCard from "../ImageCards";
 
-const CardList = (props) => (
-	<div className="container">
-		<div className="row">
-	    {props.imageFileNames.map((fileName, index) => {
-		  return <ImageCard key={index} fileName={fileName} alt={fileName} 
-		  clickHandler={props.clickHandler} 
-		  gameStatus={props.gameStatus} />
-	    })}
-	  </div>
+const CardList = props => (
+  <div className="card" onClick={() => props.clickCount(props.id)}>
+    <div className="img-container">
+      <img alt={props.name} src={props.image} />
+    </div>
   </div>
 );
 

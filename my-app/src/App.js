@@ -1,98 +1,64 @@
 import React, { Component } from "react";
+import Card from "./components/Card";
 import Wrapper from "./components/Wrapper";
-import NavBar from "./components/NavBar";
-import Footer from "./components/Footer";
-import ImageFiles from "./ImageFiles";
-import CardList from "./components/CardList";
+import Header from "./components/Header";
+import cards from "./cards.json";
+import "./App.css";
 
 class App extends Component {
+  // Setting this.state.cards to the cards json array
   state = {
-    imageFileNames: ImageFiles,
-    imagesClicked: [],
-    topscore: 0,
+    cards,
     score: 0,
-    gamestatus: 0 
+    highscore: 0
   };
-  componentDidMount() {
-    this.setState({
-      imageFileNames: this.shuffle(this.state.imageFileNames)
-    }, () => {
-      console.log("One start, Shuffle images");
+
+  gameOver = () => {
+    if (this.state.score > this.state.highscore) {
+      this.setState({highscore: this.state.score}, function() {
+        console.log(this.state.highscore);
+      });
+    }
+    this.state.cards.forEach(card => {
+      card.count = 0;
+    });
+    alert(`Game Over :( \nscore: ${this.state.score}`);
+    this.setState({score: 0});
+    return true;
+  }
+
+  clickCount = id => {
+    this.state.cards.find((o, i) => {
+      if (o.id === id) {
+        if(cards[i].count === 0){
+          cards[i].count = cards[i].count + 1;
+          this.setState({score : this.state.score + 1}, function(){
+            console.log(this.state.score);
+          });
+          this.state.cards.sort(() => Math.random() - 0.5)
+          return true; 
+        } else {
+          this.gameOver();
+        }
+      }
     });
   }
-  handleClick = event => {
-    const clickedFile = event.target.alt;
-    const fileClickedBefore = this.imageClickedBefore(clickedFile);
-    if (fileClickedBefore) {
-      this.setState({
-        imageFileNames: this.shuffle(this.state.imageFileNames),
-        clickedImages: [],
-        score: 0,
-        feedback: "Game Over! You Guessed The Same Image Twice!",
-        gameStatus: 2
-      }, () => {
-      });
-    } else {
-      let newScore = this.state.score + 1;
-      if (newScore === this.state.imageFileNames.length) {
-        this.setState({
-        imageFileNames: this.shuffle(this.state.imageFileNames),
-          clickedImages: [],
-          score: 0,
-          topScore: newScore,
-          feedback: "Congrats! You Have Guessed All Of The Images Correctly!",
-          gameStatus: 1
-          });
-      } else {
-        const clickedImagesCopy = this.state.clickedImages.slice();
-        clickedImagesCopy.push(clickedFile);
-        const newTopScore = (newScore > this.state.topScore) ? newScore : this.state.topScore;
-        this.setState({
-        imageFileNames: this.shuffle(this.state.imageFileNames),
-          clickedImages: clickedImagesCopy,
-          score: newScore,
-          topScore: newTopScore,
-          feedback: "Yes! You Guessed The Image Correctly!",
-          gameStatus: 0
-          }, () => {
-        });
-      }
-    }
-  };
-
-  imageClickedBefore = (clickedFileName) => {
-  	for (let index=0; index<this.state.clickedImages.length; index++) {
-  		if (this.state.clickedImages[index] === clickedFileName) {
-        return true;
-      }
-    }
-    return false;
-  };
-
-  shuffle = (array) => {
-    var currentIndex = array.length, tempVal, randomIndex;
-    while (0 !== currentIndex) {
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex -= 1;
-      tempVal = array[currentIndex];
-      array[currentIndex] = array[randomIndex];
-      array[randomIndex] = tempVal;
-    }
-    return array;
-  };
-
+  // Map over this.state.cards and render a cardCard component for each card object
   render() {
-   return (
-    <div>
-      <NavBar score={this.state.score} topScore={this.state.topScore} feedback={this.state.feedback} gameStatus={this.state.gameStatus} />
-      <CardList imageFileNames={this.state.imageFileNames} clickHandler={this.handleClick} gameStatus={this.state.gameStatus} />
-      <Footer />
-    </div>
+    return (
+      <Wrapper>
+        <Header score={this.state.score} highscore={this.state.highscore}>Clicky Game</Header>
+        {this.state.cards.map(card => (
+          <Card
+            clickCount={this.clickCount}
+            id={card.id}
+            key={card.id}
+            image={card.image}
+          />
+        ))}
+      </Wrapper>
     );
   }
-
-
-
 }
 
 export default App;

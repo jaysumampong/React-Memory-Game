@@ -1,19 +1,12 @@
 import React from "react";
-import "./style.css";
 
-const NavBar = props => (
-  <div className="bg-dark navbar-dark container-fluid text-center pt-1 pb-1">
-    <div className="row">
-      <div className="col-md-4">
-        <h2><a href="." className="text-white nounderline" id="app-name">Clicky Game</a></h2>
-      </div>
-      <div className={"col-md-4 " + (props.gameStatus == "2" ? " text-danger" : (props.gameStatus == "1" ? " text-success" : " text-info"))}>
-        <h3>{props.feedback}</h3>
-      </div>
-      <div className="col-md-4 text-muted">
-        <h3>Score: {props.score} | Top Score: {props.topScore}</h3>
-      </div>
+const Header = props => (
+  <div className="header">
+    <div className="title">{props.children}</div>
+    <div className="scores">
+      Score: {props.score} Highscore: {props.highscore}
     </div>
   </div>
 );
-export default NavBar;
+
+export default Header;
